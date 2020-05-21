@@ -1,0 +1,10 @@
+ul#list {
+  list-style: none;
+}
+
+.delete {
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+  margin-right: 5px;
+}
