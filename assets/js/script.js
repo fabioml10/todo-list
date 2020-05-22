@@ -4,7 +4,14 @@ let data = ["One", "Two", "Three", "Four", "Five"]
 function start() {
   preventFormSubmit()
   updateList(data)
-  document.getElementById("name").addEventListener("change", createUpdateElement)
+
+  let inputName = document.getElementById("name")
+  inputName.addEventListener("keyup", function (e) {
+    if (e.key === "Enter") {
+      createUpdateElement()
+    }
+  })
+  inputName.focus()
 }
 
 function preventFormSubmit() {
@@ -21,7 +28,7 @@ function createLi(name, id) {
   attLiElement.value = id;
   liElement.setAttributeNode(attLiElement);
 
-  liElement.append(createDeleteButton())
+  liElement.append(createDeleteButton(id))
   liElement.append(creatSpanText(name))
 
   return liElement
@@ -34,7 +41,7 @@ function creatSpanText(name) {
   return spanElement
 }
 
-function createDeleteButton() {
+function createDeleteButton(id) {
   const imgElement = document.createElement("img")
 
   let attImgElement = document.createAttribute("src");
@@ -45,7 +52,13 @@ function createDeleteButton() {
   attImgElement.value = `delete`;
   imgElement.setAttributeNode(attImgElement);
 
-  imgElement.addEventListener("click", deleteElement)
+  imgElement.addEventListener("click", function () {
+    if (id > -1) {
+      data.splice(id, 1);
+      updateList(data)
+      resetDataValue()
+    }
+  })
 
   return imgElement
 }
@@ -64,8 +77,6 @@ function createUpdateElement() {
 
   const elementValue = event.target.value
   const elementDataId = event.target.getAttribute("content")
-  console.log(elementDataId)
-  console.log(elementValue)
 
   if (elementDataId != "default") {
     data[data.indexOf(elementDataId)] = elementValue
@@ -78,20 +89,10 @@ function createUpdateElement() {
   resetDataValue()
 }
 
-function deleteElement() {
-  const removeElement = event.target.parentNode
-  const index = data.indexOf(removeElement.textContent);
-  if (index > -1) {
-    data.splice(index, 1);
-    updateList(data)
-    resetDataValue()
-  }
-}
-
 function setUpdateElement() {
   const input = document.getElementById("name")
   input.value = event.target.textContent
-  input.setAttribute("content", input.value )
+  input.setAttribute("content", input.value)
   input.focus()
 }
 
