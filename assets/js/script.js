@@ -1,23 +1,22 @@
-document.addEventListener("DOMContentLoaded", start)
 let data = ["One", "Two", "Three", "Four", "Five"]
 
-function start() {
+document.addEventListener("DOMContentLoaded", () => {
   preventFormSubmit()
   updateList(data)
 
   let inputName = document.getElementById("name")
-  inputName.addEventListener("keyup", function (e) {
+  inputName.addEventListener("keyup", (e) => {
     if (e.key === "Enter") {
       createUpdateElement()
     }
   })
   inputName.focus()
-}
+})
 
 function preventFormSubmit() {
   const form = document.querySelector("form")
-  form.addEventListener("submit", function (event) {
-    event.preventDefault()
+  form.addEventListener("submit", (e) => {
+    e.preventDefault()
   })
 }
 
@@ -54,7 +53,8 @@ function createDeleteButton(id) {
 
   imgElement.addEventListener("click", function () {
     if (id > -1) {
-      data.splice(id, 1);
+      // data.splice(id, 1);
+      data = data.filter((_, index) => id !== index)
       updateList(data)
       resetDataValue()
     }
@@ -68,9 +68,13 @@ function updateList(list) {
   const listElement = document.getElementById("list")
   clearList(listElement)
 
-  for (let i = 0; i < list.length; i++) {
-    listElement.append(createLi(list[i], i))
-  }
+  list.forEach((element, i) =>{
+    listElement.append(createLi(element, i))
+  })
+
+  // for (let i = 0; i < list.length; i++) {
+  //   listElement.append(createLi(list[i], i))
+  // }
 }
 
 function createUpdateElement() {
@@ -81,7 +85,8 @@ function createUpdateElement() {
   if (elementDataId != "default") {
     data[data.indexOf(elementDataId)] = elementValue
   } else {
-    data.push(elementValue)
+    data = [...data, elementValue]
+    // data.push(elementValue)
   }
 
   updateList(data)
